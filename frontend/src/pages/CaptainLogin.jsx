@@ -38,11 +38,12 @@ function CaptainLogin() {
       
       
       
-      navigate('/captain-home')
+      // navigate('/captain-home')
     }
 
     setEmail('')
     setPassword('')
+    navigate('/captain-home')
   }
 
   return (
