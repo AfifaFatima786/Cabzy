@@ -5,7 +5,7 @@ export const UserDataContext=createContext()
 
 
 
-function userContext({children}) {
+const UserContextProvider=({children})=>{
 
 
     const [user,setUser]=useState({
@@ -18,7 +18,7 @@ function userContext({children}) {
 
   return (
     <div>
-        <UserDataContext.Provider value={user}>
+        <UserDataContext.Provider value={{user,setUser}}>
         {children}
         </UserDataContext.Provider>
         
@@ -26,4 +26,4 @@ function userContext({children}) {
   )
 }
 
-export default userContext
+export default UserContextProvider

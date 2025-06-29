@@ -3,14 +3,14 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 const userSchema=new mongoose.Schema({
-    fullname:{
-        firstname:{
+    fullName:{
+        firstName:{
             type:String,
             required:true,
             minLength:[3,'First name must be at least 3 characters long']
         },
 
-        lastname:{
+        lastName:{
             type:String,
             minLength:[3,'Last name must be at least 3 characters long']
         }
@@ -32,7 +32,7 @@ const userSchema=new mongoose.Schema({
 })
 
 userSchema.methods.generateAuthToken=function(){
-    const token=jwt.sign({_id:this._id},process.env.JWT_SECRET,{expiresIn:'24h'})
+    const token=jwt.sign({_id:this._id},process.env.JWT_SECRET,{expiresIn:"24h"})
     return token;
 
 }

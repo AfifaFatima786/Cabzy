@@ -1,19 +1,24 @@
-import React,{useState} from 'react'
-import { Link } from 'react-router-dom'
-
+import React,{useState,createContext} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import {UserDataContext} from '../context/UserContext'
 
 function Usersignup() {
 
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
-  const [ firstName, setFirstName ] = useState('')
-  const [ lastName, setLastName ] = useState('')
+  const [ firstName, setfirstName ] = useState('')
+  const [ lastName, setlastName ] = useState('')
   const [ userData, setUserData ] = useState({})
 
+  const navigate=useNavigate()
+
+  const {user,setUser}=React.useContext(UserDataContext) /* to set the user maine context se phle sb manga liya then further i can do any changes to make it global */
+
   
-  const submitHandler=(e)=>{
+  const submitHandler=async (e)=>{
     e.preventDefault()
-    setUserData({
+    const newUser={
       fullName:{
         firstName:firstName,
         lastName:lastName,
@@ -21,14 +26,36 @@ function Usersignup() {
       },
       email:email,
       password:password
-    })
-    console.log(userData)
+    }
+
+
+    console.log(newUser)
+// yahan pr humne with credentials true kr diya hai vo nahi kiya tha pehle srf login mein he kiya tha isliye regsister route pr cookie set nahi ho rhi thi
+
+
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser,{withCredentials:true})
+
+    /*axios.post(url,newUser)   this is the syntax to send information from frontend to backend by giving exact url the info from here goes to that specific url in backend so that we can access info there*/
+
+    if(response.status==201){
+      const data=response.data
+
+      setUser(data.user)  /* exactly yha p hm user ko set krrhe hai context variable me so that it is accessible to any other components */
+
+      localStorage.setItem('token',data.token)
+      navigate('/home')
+
+
+    }
+
+
+    
 
     setEmail('')
     setPassword('')
 
-    setFirstName('')
-    setLastName('')
+    setfirstName('')
+    setlastName('')
   }
 
 
@@ -53,7 +80,7 @@ function Usersignup() {
                 placeholder='First name'
                 value={firstName}
                 onChange={(e) => {
-                  setFirstName(e.target.value)
+                  setfirstName(e.target.value)
                 }}
               />
               <input
@@ -63,7 +90,7 @@ function Usersignup() {
                 placeholder='Last name'
                 value={lastName}
                 onChange={(e) => {
-                  setLastName(e.target.value)
+                  setlastName(e.target.value)
                 }}
               />
             </div>

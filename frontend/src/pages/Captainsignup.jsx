@@ -1,11 +1,14 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CaptainDataContext } from '../context/CaptainContext'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-function Captainsignup() {
- 
+const CaptainSignup = () => {
 
-   const [ email, setEmail ] = useState('')
+  const navigate = useNavigate()
+
+  const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ firstName, setFirstName ] = useState('')
   const [ lastName, setLastName ] = useState('')
@@ -14,13 +17,14 @@ function Captainsignup() {
   const [ vehiclePlate, setVehiclePlate ] = useState('')
   const [ vehicleCapacity, setVehicleCapacity ] = useState('')
   const [ vehicleType, setVehicleType ] = useState('')
-  const [captainData,setCaptainData]=useState({})
 
 
-    
+  const { captain, setCaptain } = React.useContext(CaptainDataContext)
+
+
   const submitHandler = async (e) => {
     e.preventDefault()
-    setCaptainData ({
+    const captainData = {
       fullName: {
         firstName: firstName,
         lastName: lastName
@@ -30,15 +34,36 @@ function Captainsignup() {
       vehicle: {
         color: vehicleColor,
         plate: vehiclePlate,
-        capacity: vehicleCapacity,
+        capacity:vehicleCapacity,
         vehicleType: vehicleType
       }
+    }
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, captainData,{
+      withCredentials:true
+  
     })
-    console.log(captainData)
+
+    if (response.status === 201) {
+      const data = response.data
+      setCaptain(data.captain)  /*backend me successfully register hogya uske baad hi hm frontend k context me update yaani setCaptain krege*/
+      localStorage.setItem('token', data.token)
+      
+      console.log(data.token)
+      
+      navigate('/captain-home')
+    }
+
+    setEmail('')
+    setFirstName('')
+    setLastName('')
+    setPassword('')
+    setVehicleColor('')
+    setVehiclePlate('')
+    setVehicleCapacity('')
+    setVehicleType('')
+
   }
-
-
-    
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
@@ -141,12 +166,13 @@ function Captainsignup() {
               <option value="" disabled>Select Vehicle Type</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
-              <option value="moto">Moto</option>
+              <option value="motorcycle">Motorcycle</option>
             </select>
           </div>
 
           <button
-            className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
+            className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base' 
+        
           >Create Captain Account</button>
 
         </form>
@@ -160,5 +186,4 @@ function Captainsignup() {
   )
 }
 
-export default Captainsignup
- 
+export default CaptainSignup

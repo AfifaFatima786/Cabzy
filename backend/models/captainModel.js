@@ -3,14 +3,14 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 const captainSchema=new mongoose.Schema({
-    fullname:{
-        firstname:{
+    fullName:{
+        firstName:{
             type:String,
             required:true,
             minLength:[3,'First name must be at least 3 characters long']
         },
 
-        lastname:{
+        lastName:{
             type:String,
             minLength:[3,'Last name must be at least 3 characters long']
         }
@@ -73,8 +73,10 @@ const captainSchema=new mongoose.Schema({
     }
 })
 
-captainSchema.methods.generateToken=function(){
+captainSchema.methods.generateToken=async function(){
     const token=jwt.sign({_id:this._id},process.env.JWT_SECRET,{expiresIn:'24h'})
+    console.log(token)
+    
     return token;
 }
 

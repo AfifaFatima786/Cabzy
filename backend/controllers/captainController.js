@@ -2,21 +2,22 @@ const captainModel=require('../models/captainModel')
 const captainService=require('../services/captainServices')
 
 const {validationResult}=require('express-validator')
-const generateToken=require('../models/captainModel')
+const generateToken=require('../utils/generateToken')
 const blacklistTokenModel=require('../models/blacklistTokenModel')
-
+const cookieOptions=require('../utils/cookieOptions')
 
 
 
 module.exports.registerCaptain=async(req,res,next)=>{
     const errors=validationResult(req);   /*isse phle srf check hoga ki sb fields ho but handle us error ko hm yhi controller me hi krege*/
-    console.log("reuest aaa gyi")
+    console.log("request aaa gyi")
     if(!errors.isEmpty()){
+        console.log("yha herror")
         return res.status(400).json({errors:errors.array()})
     }
 
 
-    const {fullname,email,password,vehicle}=req.body;
+    const {fullName,email,password,vehicle}=req.body;
     console.log(req.body)
 
 
@@ -27,10 +28,10 @@ module.exports.registerCaptain=async(req,res,next)=>{
     }
 
     const hashed=await captainModel.hashPassword(password)
-
+    console.log(hashed)
     const captain=await captainService.createCaptain({
-        firstname:fullname.firstname,
-        lastname:fullname.lastname,
+        firstName:fullName.firstName,
+        lastName:fullName.lastName,
         email,
         password:hashed,
         color:vehicle.color,
@@ -39,8 +40,10 @@ module.exports.registerCaptain=async(req,res,next)=>{
         vehicleType:vehicle.vehicleType
     })
 
-    const token=generateToken();
-    res.cookie('token',token)
+    const token=await generateToken();
+    console.log(token)
+    res.cookie('token', token,cookieOptions);
+    
 
     res.status(201).json({token,captain})
 
@@ -52,7 +55,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
 module.exports.loginCaptain=async(req,res,next)=>{
   
     const errors=validationResult(req);
-
+  
     if(!errors.isEmpty()){
         return res.status(4000).json({errors:errors.array()})
     }
@@ -72,13 +75,11 @@ module.exports.loginCaptain=async(req,res,next)=>{
 
     }
 
-        const token=captain.generateToken();
-        res.cookie('token',token)
+        const token=await generateToken();
+
+        // console.log(token+"yha controller me s");
+        res.cookie('token', token,cookieOptions);
         res.status(200).json({token,captain})
-
-        
-    
-
 
 }
 
@@ -97,8 +98,6 @@ module.exports.logoutCaptain=async(req,res,next)=>{
     await blacklistTokenModel.create({token});
 
     res.status(200).json({message:'Logged Out'})
-
-
     
 }
 
