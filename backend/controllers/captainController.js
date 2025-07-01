@@ -40,7 +40,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
         vehicleType:vehicle.vehicleType
     })
 
-    const token=await generateToken();
+    const token=await generateToken(captain._id);
     console.log(token)
     res.cookie('token', token,cookieOptions);
     
@@ -75,7 +75,7 @@ module.exports.loginCaptain=async(req,res,next)=>{
 
     }
 
-        const token=await generateToken();
+        const token=await generateToken(captain._id);
 
         // console.log(token+"yha controller me s");
         res.cookie('token', token,cookieOptions);
@@ -85,6 +85,9 @@ module.exports.loginCaptain=async(req,res,next)=>{
 
 
 module.exports.getCaptainProfile=async(req,res,next)=>{
+    console.log("hii")
+
+    console.log(req.captain+"yha profile me diqqt")
     res.status(200).json(req.captain)
 }
 

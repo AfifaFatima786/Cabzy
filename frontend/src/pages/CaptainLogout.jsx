@@ -11,7 +11,7 @@ export const CaptainLogout=()=>{
     axios.get(`${import.meta.env.VITE_BASE_URL}/captain/logout`,{withCredentials:true}).then((response)=>{
         if(response.status==200){
             localStorage.removeItem('token');
-            navigate('/login')
+            navigate('/captain-login')
         }
     })
 

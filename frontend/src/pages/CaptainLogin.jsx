@@ -33,11 +33,10 @@ function CaptainLogin() {
     if (response.status === 200) {
       const data = response.data
       setCaptain(data.captain)  /*backend me successfully register hogya uske baad hi hm frontend k context me update yaani setCaptain krege*/
-      
-      localStorage.setItem('token', data.token)
-      
-      
-      
+      console.log(data.captain)
+      console.log(data.token)
+      localStorage.setItem('token', JSON.stringify(data.token))
+      console.log('Stored token:', localStorage.getItem('token'));
       // navigate('/captain-home')
     }
 
