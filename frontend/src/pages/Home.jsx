@@ -4,6 +4,9 @@ import gsap from 'gsap'
 import { useRef } from 'react'
 import { IoIosArrowDown } from "react-icons/io";
 import LocationSearchPanel from '../components/LocationSearchPanel';
+import { FaUser } from "react-icons/fa";
+import VehiclePanel from '../components/VehiclePanel';
+
 
 
 function Home() {
@@ -14,6 +17,8 @@ function Home() {
 
   const panelRef = useRef(null)
   const panelCloseRef=useRef(null);
+  const [vehiclePanelOpen,setVehiclePanelOpen]=useState(false)
+  const vehiclePanelRef=useRef(null)
 
 
   const submitHandler=(e)=>{
@@ -46,6 +51,22 @@ function Home() {
   }
   }, [panelOpen])
 
+
+
+   useEffect(() => {
+    if(vehiclePanelOpen){
+    gsap.to(vehiclePanelRef.current,{
+      transform:'translateY(0)'
+    })}else{
+
+      gsap.to(vehiclePanelRef.current,{
+      transform:'translateY(100%)'
+      })
+
+    
+  }}
+  , [vehiclePanelOpen])
+
   
 
 
@@ -62,7 +83,7 @@ function Home() {
     src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
     alt="Uber Logo"
   />
-  <div className='h-screen w-screen'>
+  <div  className='h-screen w-screen'>
   <img
     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS24ZBRpV4HJXIkRJsvQes6jbNvz1zOhySwWg&s"
     alt="Background"
@@ -91,8 +112,15 @@ function Home() {
     </div>
 
     <div ref={panelRef}  className="h-0 bg-white p-1  ">
-            <LocationSearchPanel/>
+            <LocationSearchPanel setVehiclePanel={setVehiclePanelOpen} setPanelOpen={setPanelOpen}/>
     </div>
+  </div>
+            
+  <div ref={vehiclePanelRef} 
+       className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
+
+        <VehiclePanel setVehiclePanelOpen={setVehiclePanelOpen}/>
+
   </div>
 
 
