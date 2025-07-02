@@ -6,6 +6,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import LocationSearchPanel from '../components/LocationSearchPanel';
 import { FaUser } from "react-icons/fa";
 import VehiclePanel from '../components/VehiclePanel';
+import ConfirmRide from '../components/ConfirmRide';
+import LookingForDriver from '../components/LookingForDriver';
+import WaitingForDriver from '../components/WaitingForDriver';
 
 
 
@@ -19,6 +22,12 @@ function Home() {
   const panelCloseRef=useRef(null);
   const [vehiclePanelOpen,setVehiclePanelOpen]=useState(false)
   const vehiclePanelRef=useRef(null)
+  const [ConfirmRidePanel,setConfirmRidePanel]=useState(false)
+  const confirmRidePanelRef=useRef(null)
+  const [vehicleFound,setVehicleFound]=useState(false)
+  const vehicleFoundRef=useRef(null)
+  const waitingForDriverRef=useRef(null)
+  const [waitingForDriver,setwaitingForDriver]=useState(false)
 
 
   const submitHandler=(e)=>{
@@ -66,6 +75,56 @@ function Home() {
     
   }}
   , [vehiclePanelOpen])
+
+
+
+  useEffect(() => {
+    if(ConfirmRidePanel){
+    gsap.to(confirmRidePanelRef.current,{
+      transform:'translateY(0)'
+    })}else{
+
+      gsap.to(confirmRidePanelRef.current,{
+      transform:'translateY(100%)'
+      })
+
+    
+  }}
+  , [ConfirmRidePanel])
+
+
+
+  useEffect(() => {
+    if(vehicleFound){
+    gsap.to(vehicleFoundRef.current,{
+      transform:'translateY(0)'
+    })}else{
+
+      gsap.to(vehicleFoundRef.current,{
+      transform:'translateY(100%)'
+      })
+
+    
+  }}
+  , [vehicleFound])
+
+  
+  useEffect(() => {
+    if(waitingForDriver){
+    gsap.to(waitingForDriverRef.current,{
+      transform:'translateY(0)'
+    })}else{
+
+      gsap.to(waitingForDriverRef.current,{
+      transform:'translateY(100%)'
+      })
+
+    
+  }}
+  , [waitingForDriver])
+
+
+
 
   
 
@@ -119,7 +178,32 @@ function Home() {
   <div ref={vehiclePanelRef} 
        className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
-        <VehiclePanel setVehiclePanelOpen={setVehiclePanelOpen}/>
+        <VehiclePanel setVehiclePanelOpen={setVehiclePanelOpen} setConfirmRidePanel={setConfirmRidePanel}/>
+
+  </div>
+
+  <div ref={confirmRidePanelRef} 
+       className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
+
+        <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+
+  </div>
+
+  <div ref={vehicleFoundRef}
+       className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
+        <LookingForDriver setVehicleFound={setVehicleFound}/>
+
+        
+
+  </div>
+
+
+
+  <div ref={waitingForDriverRef}
+       className='fixed w-full  bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
+        <WaitingForDriver waitingForDriver={waitingForDriver}/>
+
+        
 
   </div>
 
