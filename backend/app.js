@@ -7,6 +7,7 @@ const connectToDb=require('./db/db')
 const userRoutes=require('./routes/userRoutes')
 const cookieParser=require('cookie-parser')
 const captainRoutes = require('./routes/captainRoutes')
+const mapsRoutes=require('./routes/mapsRoutes')
 
 
 connectToDb()
@@ -25,6 +26,7 @@ app.get('/',(req,res)=>{
 
 app.use('/users',userRoutes)
 app.use('/captain',captainRoutes)
+app.use('/maps',mapsRoutes)
 
 
 module.exports=app;

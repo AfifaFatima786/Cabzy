@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import { useRef } from 'react'
 import { IoIosArrowDown } from "react-icons/io";
 import LocationSearchPanel from '../components/LocationSearchPanel';
-import { FaUser } from "react-icons/fa";
+
 import VehiclePanel from '../components/VehiclePanel';
 import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
