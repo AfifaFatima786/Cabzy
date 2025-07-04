@@ -5,7 +5,10 @@ const blacklistToken=require('../models/blacklistTokenModel');
 const captainModel = require('../models/captainModel');
 
 module.exports.authUser=async(req,res,next)=>{
-    // const token=req.cookies.token|| req.headers.authorization.split(' ')[1];
+    
+
+    console.log(req.cookies?.token)
+    req.token = req.cookies.token;
 
     const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
 
@@ -18,15 +21,20 @@ module.exports.authUser=async(req,res,next)=>{
     const isBlacklisted=await blacklistToken.findOne({token})
 
     if(isBlacklisted){
+        console.log("Blacklisted token")
         return res.status(401).json({message:'Unauthorized'})
     }
 
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET);
 
-        const user=await userModel.findById(decoded.id)
-        req.user=user;
+        
 
+        user=await userModel.findById(decoded._id)
+
+       
+        req.user=user;
+       
         return next();
 
     } catch(err){
