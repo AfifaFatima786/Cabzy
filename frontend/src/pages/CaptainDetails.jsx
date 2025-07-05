@@ -1,19 +1,24 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import {  IoMdCash } from 'react-icons/io'
 import { FaLocationDot } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
 import { IoIosTimer } from "react-icons/io";
 import { MdSpeed } from "react-icons/md";
 import { SlNotebook } from "react-icons/sl";
+import { CaptainDataContext } from '../context/CaptainContext';
 
 function CaptainDetails() {
+  const {captain}=useContext(CaptainDataContext)
+
+
+
   return (
     <div className='flex flex-col gap-4'>
          <div className='flex items-center justify-between'>
         <div className='flex items-center justify-start gap-2' >
         
         <img  className='rounded-full w-10 h-10  object-cover ' src="https://imgs.search.brave.com/-Ay-agvNmH65Oi9ISI5AI9WxhKaTsF7kcsXrih-PvCg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9idXJz/dC5zaG9waWZ5Y2Ru/LmNvbS9waG90b3Mv/d29tYW4taG9sZGlu/Zy1oZXItZmFjZS1p/bi1ib3RoLWhlci1o/YW5kcy5qcGc_d2lk/dGg9MTAwMCZmb3Jt/YXQ9cGpwZyZleGlm/PTAmaXB0Yz0w" alt="" />
-        <h4 className='text-lg font-medium'>Harsh Patel</h4>
+        <h4 className='text-lg font-medium capitalize'>{captain.fullName.firstName+" "+captain.fullName.lastName}</h4>
         
         </div>
 

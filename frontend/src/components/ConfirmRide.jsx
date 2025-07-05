@@ -6,6 +6,8 @@ import { IoMdCash } from "react-icons/io";
 import LookingForDriver from './LookingForDriver';
 
 function ConfirmRide(props) {
+
+  
   return (
     <div>
          <h5 onClick={()=>{
@@ -23,23 +25,24 @@ function ConfirmRide(props) {
             <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                 <FaLocationDot />
                 <div>
-                    <h3>546/415</h3>
-                    <p>Sarfarazganj Lucknow</p>
+                    
+                    <p>{props.pickup}</p>
+                    
                 </div>
             </div>
             <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                 <SlLocationPin />
                 <div>
-                    <h3>546/415</h3>
-                    <p>Sarfarazganj Lucknow</p>
+                    
+                    <p>{props.destination}</p>
                 </div>
                 </div>
 
                   <div className='flex gap-4 px-2 py-1  items-center '>
                 <IoMdCash />
                 <div>
-                    <h3>193.20</h3>
-                    <p>Cash Cash</p>
+                    <p>{props.fare[props.vehicleType]}</p>
+                    
                 </div>
                 </div>
             
@@ -50,6 +53,7 @@ function ConfirmRide(props) {
         <button onClick={()=>{
           props.setVehicleFound(true)
           props.setConfirmRidePanel(false)
+          props.createRide()
         }} className='w-full bg-green-600 text-white font-semibold p-2 rounded-lg  '>Confirm</button>
     </div>
     </div>

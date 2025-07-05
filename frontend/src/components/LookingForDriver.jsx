@@ -19,23 +19,23 @@ function LookingForDriver(props) {
                 <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                     <FaLocationDot />
                     <div>
-                        <h3>546/415</h3>
-                        <p>Sarfarazganj Lucknow</p>
+                        {props.pickup}
+                        
                     </div>
                 </div>
                 <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                     <SlLocationPin />
                     <div>
-                        <h3>546/415</h3>
-                        <p>Sarfarazganj Lucknow</p>
+                        <p>{props.destination}</p>
+                        
                     </div>
                     </div>
     
                       <div className='flex gap-4 px-2 py-1  items-center '>
                     <IoMdCash />
                     <div>
-                        <h3>193.20</h3>
-                        <p>Cash Cash</p>
+                     
+                       <p>{props.fare[props.vehicleType]}</p>
                     </div>
                     </div>
                 

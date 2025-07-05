@@ -54,7 +54,7 @@ module.exports.getSuggestions = async (req, res) => {
         }
 
 
-        const {input}=req.query;
+        const {input}=req.body;
 
         const suggestions=await mapsService.getSuggestions(input);
         res.status(200).json(suggestions);
