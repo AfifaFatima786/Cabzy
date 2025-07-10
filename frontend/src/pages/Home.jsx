@@ -6,6 +6,10 @@ import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import axios from 'axios';
+import { SocketContext } from '../context/SocketContext';
+import { useContext } from 'react';
+import { UserDataContext } from '../context/UserContext';
+
 
 function Home() {
   const [pickup, setPickup] = useState('');
@@ -24,6 +28,19 @@ function Home() {
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
+  const {sendMessage,receiveMessage}=useContext(SocketContext)
+  const {user}=useContext(UserDataContext)
+
+
+
+  useEffect(()=>{
+    console.log(user+"ye user h")
+    console.log(user._id)
+    sendMessage("join",{ userType:"user",userId:user._id})
+  },[user])
+
+
+
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);

@@ -21,6 +21,7 @@ module.exports.registerUser = async (req, res, next) => {
   const hashed = await userModel.hashPassword(password);
 
   const user = await userService.createUser({
+    
     firstName: fullName.firstName,
     lastName: fullName.lastName,
     email,
@@ -32,7 +33,19 @@ module.exports.registerUser = async (req, res, next) => {
   // ✅ Properly set cookie with secure settings
   res.cookie('token', token,cookieOptions);
 
-  res.status(201).json({ token, user });
+  // res.status(201).json({ token, user });
+
+   res.status(201).json({
+    token,
+    user: {
+      _id: user._id,
+      email: user.email,
+      fullName: {
+        firstName: user.firstName,
+        lastName: user.lastName
+      }
+    }
+  });
 };
 
 module.exports.loginUser = async (req, res, next) => {
@@ -62,7 +75,21 @@ module.exports.loginUser = async (req, res, next) => {
 
   res.cookie('token', token,cookieOptions);
 
-  res.status(200).json({ token, user });
+  // res.status(200).json({ token, user });
+
+
+  res.status(200).json({
+  token,
+  user: {
+    _id: user._id,
+    email: user.email,
+    fullName: {
+      firstName: user.firstName,
+      lastName: user.lastName
+    }
+  }
+});
+
 };
 
 module.exports.getUserProfile = async (req, res, next) => {

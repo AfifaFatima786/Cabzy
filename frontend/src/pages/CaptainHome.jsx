@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import {useState,useEffect,useRef} from 'react'
 import gsap from 'gsap'
 import { FiLogOut } from "react-icons/fi";
+import { useContext } from 'react';
 
 import CaptainDetails from './CaptainDetails';
 import RidePopUp from '../components/RidePopUp';
 import ConfirmRidePopup from '../components/ConfirmRidePopup';
-
+import { SocketContext } from '../context/SocketContext';
+import { CaptainDataContext } from '../context/CaptainContext';
 
 function CaptainHome() {
 
@@ -16,6 +18,30 @@ function CaptainHome() {
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
   const confirmRidePopupPanelRef = useRef(null)
 
+  const {sendMessage,receiveMessage}=useContext(SocketContext)
+  const {captain}=useContext(CaptainDataContext)
+
+
+  // useEffect(()=>{
+      
+  //     console.log(captain._id)
+  //     socket.emit('join',{
+  //       userId:captain._id,
+  //       userType:'captain'
+  //     })
+      
+
+
+  //   },[captain])
+
+
+  
+    useEffect(()=>{
+     
+      console.log(captain._id)
+      sendMessage("join",{ userType:"captain",userId:captain._id})
+    },[captain])
+  
 
   useEffect(() => {
     if(ridePopupPanel){

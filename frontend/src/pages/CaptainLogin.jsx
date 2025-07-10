@@ -18,6 +18,7 @@ function CaptainLogin() {
     e.preventDefault()
 
     const captain={
+      
       email:email,
       password:password
     }

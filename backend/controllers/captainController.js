@@ -45,7 +45,25 @@ module.exports.registerCaptain=async(req,res,next)=>{
     res.cookie('token', token,cookieOptions);
     
 
-    res.status(201).json({token,captain})
+    // res.status(201).json({token,captain})
+
+      res.status(201).json({
+    token,
+    captain: {
+      _id: captain._id,
+      email: captain.email,
+      vehicleType: captain.vehicleType,
+      fullName: {
+        firstName: captain.firstName,
+        lastName: captain.lastName
+      },
+      vehicle: {
+        color: captain.color,
+        plate: captain.plate,
+        capacity: captain.capacity
+      }
+    }
+  });
 
 
 }
@@ -79,7 +97,26 @@ module.exports.loginCaptain=async(req,res,next)=>{
 
         // console.log(token+"yha controller me s");
         res.cookie('token', token,cookieOptions);
-        res.status(200).json({token,captain})
+        // res.status(200).json({token,captain})
+
+
+         res.status(200).json({
+    token,
+    captain: {
+      _id: captain._id,
+      email: captain.email,
+      vehicleType: captain.vehicleType,
+      fullName: {
+        firstName: captain.firstName,
+        lastName: captain.lastName
+      },
+      vehicle: {
+        color: captain.color,
+        plate: captain.plate,
+        capacity: captain.capacity
+      }
+    }
+  });
 
 }
 

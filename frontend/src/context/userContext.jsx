@@ -9,6 +9,7 @@ const UserContextProvider=({children})=>{
 
 
     const [user,setUser]=useState({
+        
         email:'',
         fullName:{
             firstName:'',
