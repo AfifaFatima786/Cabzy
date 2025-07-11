@@ -1,4 +1,5 @@
 const axios = require('axios');
+const captainModel=require('../models/captainModel')
 
 
 module.exports.getAddressCoordinate = async (address) => {
@@ -84,4 +85,28 @@ module.exports.getSuggestions = async (input) => {
         console.error(err);
         throw err;
     }
+}
+
+
+module.exports.getCaptainsInTheRadius=async(ltd,lng,radiusKm)=>{
+    console.log(ltd)
+    console.log("Searching near:", { lng, ltd, radius: radiusKm / 6371 });
+
+    const captains=await captainModel.find({
+        
+        location:{
+         $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: [lng, ltd] 
+        },
+        $maxDistance: radiusKm * 1000 // radius in meters
+      }}
+        
+    })
+    
+
+    
+    return captains;
+
 }

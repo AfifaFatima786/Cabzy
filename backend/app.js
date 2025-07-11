@@ -15,7 +15,7 @@ const rideRoutes=require('./routes/RideRoutes')
 connectToDb()
 
 
-app.use(cors({origin: 'http://localhost:5173', // or your frontend URL
+app.use(cors({origin: ['http://localhost:5173','https://27nsxtfm-5173.inc1.devtunnels.ms'], // or your frontend URL
   credentials: true}));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
