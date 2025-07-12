@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import LocationSearchPanel from '../components/LocationSearchPanel';
 import VehiclePanel from '../components/VehiclePanel';
@@ -7,9 +7,7 @@ import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import axios from 'axios';
 import { SocketContext } from '../context/SocketContext';
-import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
-
 
 function Home() {
   const [pickup, setPickup] = useState('');
@@ -21,26 +19,50 @@ function Home() {
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [ConfirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
-  const [waitingForDriver, setwaitingForDriver] = useState(false);
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
 
   const [activeField, setActiveField] = useState(null);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
-  const {sendMessage,receiveMessage}=useContext(SocketContext)
-  const {user}=useContext(UserDataContext)
 
+  const { user } = useContext(UserDataContext);
+  const { socket, sendMessage } = useContext(SocketContext);
 
+  // ✅ CHANGED: Check if user and user._id exist before sending socket event
+  useEffect(() => {
+    console.log('🔍 Home - User context:', user);
+    console.log('🔍 Home - Socket connected:', socket?.connected);
+    
+    if (user && user._id && socket) {
+      console.log("🟢 Sending join with user ID:", user._id);
+      sendMessage("join", { userType: "user", userId: user._id });
+    } else {
+      console.log("❌ Cannot send join - missing:", {
+        user: !!user,
+        userId: user?._id,
+        socket: !!socket
+      });
+    }
+  }, [user, socket]);
 
-  useEffect(()=>{
-    console.log(user+"ye user h")
-    console.log(user._id)
-    sendMessage("join",{ userType:"user",userId:user._id})
-  },[user])
+  // ✅ CHANGED: Updated ride-confirm listener with safe logs and UI triggers
+  useEffect(() => {
+    if (!socket) return;
 
+    const handleRideConfirm = (ride) => {
+      console.log('✅ Received ride-confirm:', ride);
+      setVehicleFound(false);
+      setWaitingForDriver(true);
+    };
 
+    socket.on('ride-confirm', handleRideConfirm);
 
+    return () => {
+      socket.off('ride-confirm', handleRideConfirm);
+    };
+  }, [socket]);
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);
@@ -75,7 +97,7 @@ function Home() {
   };
 
   async function findTrip() {
-    console.log("bhaiya click ho rha hai")
+    console.log("🔍 Find Trip clicked");
     setPanelOpen(false);
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
       params: { pickup, destination },
@@ -86,14 +108,25 @@ function Home() {
   }
 
   async function createRide() {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-      pickup,
-      destination,
-      vehicleType
-    }, {
-      withCredentials: true
-    });
-    console.log(response.data);
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+        pickup,
+        destination,
+        vehicleType
+      }, {
+        withCredentials: true
+      });
+
+      console.log("🎯 Create Ride Response:", response.data);
+
+      // ✅ FIXED: Set vehicleFound to true when ride is created successfully
+      if (response.status === 201) {
+        setVehicleFound(true);
+        setConfirmRidePanel(false);
+      }
+    } catch (err) {
+      console.error("❌ Error creating ride:", err.response?.data || err.message);
+    }
   }
 
   return (
@@ -134,7 +167,6 @@ function Home() {
               placeholder="Add a destination"
             />
           </form>
-          
         </div>
 
         {/* Location Search Panel */}
@@ -146,7 +178,7 @@ function Home() {
         >
           <button
             onClick={findTrip}
-            className="bg-black text-white px-3 py-2 rounded  relative z-100 w-full"
+            className="bg-black text-white px-3 py-2 rounded w-full"
           >
             Find Trip
           </button>
@@ -159,12 +191,10 @@ function Home() {
             setDestination={setDestination}
             activeField={activeField}
           />
-          
         </div>
       </div>
 
       {/* Panels */}
-      {/* Vehicle Panel */}
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
         vehiclePanelOpen ? 'translate-y-0 z-30' : 'translate-y-full z-0'
       }`}>
@@ -176,7 +206,6 @@ function Home() {
         />
       </div>
 
-      {/* Confirm Ride Panel */}
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
         ConfirmRidePanel ? 'translate-y-0 z-40' : 'translate-y-full z-0'
       }`}>
@@ -191,7 +220,6 @@ function Home() {
         />
       </div>
 
-      {/* Looking for Driver Panel */}
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
         vehicleFound ? 'translate-y-0 z-50' : 'translate-y-full z-0'
       }`}>
@@ -206,7 +234,6 @@ function Home() {
         />
       </div>
 
-      {/* Waiting for Driver Panel */}
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
         waitingForDriver ? 'translate-y-0 z-60' : 'translate-y-full z-0'
       }`}>

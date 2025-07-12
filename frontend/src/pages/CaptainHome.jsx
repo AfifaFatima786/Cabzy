@@ -4,6 +4,7 @@ import {useState,useEffect,useRef} from 'react'
 import gsap from 'gsap'
 import { FiLogOut } from "react-icons/fi";
 import { useContext } from 'react';
+import axios from 'axios';
 
 import CaptainDetails from './CaptainDetails';
 import RidePopUp from '../components/RidePopUp';
@@ -13,13 +14,14 @@ import { CaptainDataContext } from '../context/CaptainContext';
 
 function CaptainHome() {
 
-  const [ridePopupPanel, setRidePopupPanel] = useState(true)
+  const [ridePopupPanel, setRidePopupPanel] = useState(false)
   const ridePopupPanelRef = useRef(null)
   const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
   const confirmRidePopupPanelRef = useRef(null)
 
-  const {socket,sendMessage,receiveMessage}=useContext(SocketContext)
+  const {socket,sendMessage}=useContext(SocketContext)
   const {captain}=useContext(CaptainDataContext)
+  const [ride, setRide] = useState(null)
 
 
 
@@ -27,19 +29,12 @@ function CaptainHome() {
   
     useEffect(()=>{
      
-      console.log(captain._id)
       sendMessage("join",{ userType:"captain",userId:captain._id})
-      console.log(socket.id)
+      
 
       const updateLocation=()=>{
         if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition(position=>{
-
-            console.log({userId:captain._id,
-              location:
-              {ltd:position.coords.latitude,
-              lng:position.coords.longitude}}
-            )
 
 
 
@@ -62,16 +57,38 @@ function CaptainHome() {
       const locationInterval=setInterval(updateLocation,10000)
       updateLocation()
 
+      // ✅ FIXED: Move socket listener inside useEffect
+      const handleNewRide = (data) => {
+        console.log('🎯 New ride received:', data);
+        setRide(data)
+        setRidePopupPanel(true)
+      }
+
+      socket.on('new-ride', handleNewRide)
+
+      // ✅ ADDED: Cleanup function
+      return () => {
+        clearInterval(locationInterval)
+        socket.off('new-ride', handleNewRide)
+      }
+
+    },[captain, socket])
 
 
-    },[captain])
+    async function confirmRide(){
+      console.log("idhr call aa rhi hai ")
+      const check = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {rideId: ride._id,captainId: captain._id},
+  {
+    withCredentials: true
+  }
 
+)
+console.log(check,"Confoirm ride functione")
 
-
-    socket.on('new-ride',(data)=>{
       
-      console.log(data)
-    })
+      setRidePopupPanel(false)
+      setConfirmRidePopupPanel(true)
+    }
   
 
   useEffect(() => {
@@ -134,19 +151,30 @@ function CaptainHome() {
         <div className='h-[30%] bottom-0 p-4 flex flex-col gap-5'>
          <CaptainDetails/> 
         </div>
+        
 
-        <div ref={ridePopupPanelRef}  
+ 
+         <div ref={ridePopupPanelRef}  
        className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
-       <RidePopUp setRidePopupPanel={setRidePopupPanel} setConfirmRidePopupPanel={setConfirmRidePopupPanel}/>
+       {ride && (<RidePopUp setRidePopupPanel={setRidePopupPanel} 
+       
+       ride={ride}
+       setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+       confirmRide={confirmRide}
+       
+       />
+       )}
 
-  </div>
+  </div> 
 
 
   <div ref={confirmRidePopupPanelRef}  
        className='fixed  w-full translate-y-full  bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
-       <ConfirmRidePopup setConfirmRidePopupPanel={setConfirmRidePopupPanel} setRidePopupPanel={setRidePopupPanel} />
+       <ConfirmRidePopup setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+       ride={ride}
+        setRidePopupPanel={setRidePopupPanel} />
 
   </div>
         

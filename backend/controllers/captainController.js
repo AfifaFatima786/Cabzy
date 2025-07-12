@@ -10,15 +10,15 @@ const cookieOptions=require('../utils/cookieOptions')
 
 module.exports.registerCaptain=async(req,res,next)=>{
     const errors=validationResult(req);   /*isse phle srf check hoga ki sb fields ho but handle us error ko hm yhi controller me hi krege*/
-    console.log("request aaa gyi")
+   
     if(!errors.isEmpty()){
-        console.log("yha herror")
+        
         return res.status(400).json({errors:errors.array()})
     }
 
 
     const {fullName,email,password,vehicle}=req.body;
-    console.log(req.body)
+    
 
 
     const isCaptainAlreadyExist=await captainModel.findOne({email})
@@ -28,7 +28,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
     }
 
     const hashed=await captainModel.hashPassword(password)
-    console.log(hashed)
+
     const captain=await captainService.createCaptain({
         firstName:fullName.firstName,
         lastName:fullName.lastName,
@@ -41,7 +41,7 @@ module.exports.registerCaptain=async(req,res,next)=>{
     })
 
     const token=await generateToken(captain._id);
-    console.log(token)
+
     res.cookie('token', token,cookieOptions);
     
 
@@ -122,9 +122,7 @@ module.exports.loginCaptain=async(req,res,next)=>{
 
 
 module.exports.getCaptainProfile=async(req,res,next)=>{
-    console.log("hii")
 
-    console.log(req.captain+"yha profile me diqqt")
     res.status(200).json(req.captain)
 }
 

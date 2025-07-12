@@ -12,9 +12,9 @@ module.exports.createRide=async(req,res)=>{
 
 
     const userId = req.user?.id;
-    console.log(userId)
+
 if (!userId) {
-    console.log("User not found in request"); // helpful debug
+   
     return res.status(401).json({ message: 'Unauthorized user' });
 }
 
@@ -32,7 +32,9 @@ if (!userId) {
 
     try{
         const ride=await rideService.createRide({user:req.user.id,pickup,destination,vehicleType})
-        res.status(201).json(ride)
+        
+        // ✅ REMOVED: First response that was causing issues
+        // res.status(201).json(ride)
 
         const pickupCoordinates=await mapService.getAddressCoordinate(pickup)
 
@@ -51,7 +53,9 @@ if (!userId) {
             })
 
         })
-
+        
+        // ✅ KEEP: Only this response should be sent
+        res.status(201).json(ride);
 
        
 
@@ -59,7 +63,6 @@ if (!userId) {
 
     }
     catch(err){
-        console.log(err)
         return res.status(500).json({message:err.message})
     }
 
@@ -82,3 +85,41 @@ module.exports.getFare=async(req,res)=>{
     }
 }
 
+
+module.exports.confirmRide=async(req,res)=>{
+
+    console.log(req.body.rideId,req.body.captainId);
+    // console.log("confirm ride hai ki nahi lets check her e")
+
+    const errors=validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+
+    const rideId=req.body.rideId;
+    
+    try{
+
+        const ride=await rideService.confirmRide( rideId,req.body.captainId);
+
+        console.log(ride,"Ride printing")
+        console.log(`🎯 Ride confirmed. User socket ID: ${ride.user.socketId}`)
+
+        
+
+        sendMessageToSocketId(ride.user.socketId,
+            
+            {
+            
+            event:'ride-confirm',
+            data:ride
+
+        })
+
+
+        return res.status(200).json(ride);
+    }catch(err){
+        console.log("Try catch mein error hai re baba")
+        return res.status(500).json({message:err.message})
+    }
+}

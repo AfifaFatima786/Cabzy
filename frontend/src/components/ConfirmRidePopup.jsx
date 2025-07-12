@@ -51,21 +51,21 @@ function ConfirmRidePopup(props) {
                        <FaLocationDot />
                        <div>
                            <h3>546/415</h3>
-                           <p>Sarfarazganj Lucknow</p>
+                           {/* <p>{props.ride.pickup}</p> */}
                        </div>
                    </div>
                    <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                        <SlLocationPin />
                        <div>
                            <h3>546/415</h3>
-                           <p>Sarfarazganj Lucknow</p>
+                           {/* <p>{props.ride.destination}</p> */}
                        </div>
                        </div>
        
                          <div className='flex gap-4 px-2 py-1  items-center '>
                        <IoMdCash />
                        <div>
-                           <h3>193.20</h3>
+                           {/* <h3>{props.ride.fare}</h3> */}
                            <p>Cash Cash</p>
                        </div>
                        </div>
@@ -78,7 +78,7 @@ function ConfirmRidePopup(props) {
 
 
                <div className='w-full' >
-                 <form onSubmit={(e) => { submitHandler(e) }} className='flex flex-col gap-2 mt-5'>
+                 <form onSubmit={(e) => { submitHandler(e) }} className='flex flex-col gap-2 '>
     <input
       type="text"
       value={otp}

@@ -93,10 +93,14 @@ module.exports.loginUser = async (req, res, next) => {
 };
 
 module.exports.getUserProfile = async (req, res, next) => {
-  console.log(req.user)
-  console.log("hii")
-  res.status(200).json(req.user);
-
+  res.status(200).json({
+    _id: req.user._id,
+    email: req.user.email,
+    fullName: {
+      firstName: req.user.fullName.firstName,
+      lastName: req.user.fullName.lastName
+    }
+  });
 };
 
 module.exports.logoutUser = async (req, res, next) => {

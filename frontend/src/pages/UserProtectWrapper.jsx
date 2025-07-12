@@ -1,25 +1,50 @@
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserDataContext } from '../context/UserContext';
+import axios from 'axios';
 
 const UserProtectWrapper = ({ children }) => {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // null = not checked yet
+  const { user, setUser } = useContext(UserDataContext);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log(token)
+    console.log('🔍 UserProtectWrapper - Token:', token);
+    console.log('🔍 UserProtectWrapper - Current user context:', user);
+    
     if (!token) {
+      console.log('❌ No token found, redirecting to login');
       navigate('/login');
+      return;
+    }
+
+    // If user context is empty, fetch user data from backend
+    if (!user || !user._id) {
+      console.log('🔄 User context empty, fetching from backend...');
+      axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+        withCredentials: true
+      })
+        .then(response => {
+          console.log("✅ User profile response:", response.data);
+          setUser(response.data);
+          setIsAuthenticated(true);
+        })
+        .catch(err => {
+          console.error("❌ Profile fetch error:", err);
+          localStorage.removeItem('token');
+          navigate('/login');
+        });
     } else {
+      console.log('✅ User context already exists');
       setIsAuthenticated(true);
     }
-  }, [navigate]);
+  }, [navigate, setUser, user]);
 
-  // Show nothing or a loader until token is checked
   if (isAuthenticated === null) {
-    return null; // or <Loader />
+    return <div>Loading...</div>;
   }
 
   return <>{children}</>;
