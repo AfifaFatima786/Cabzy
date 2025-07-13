@@ -163,12 +163,12 @@ function Home() {
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       /> */}
 
-      <div className="absolute top-0 left-0 w-full h-full z-0">
-  <LiveTracking />
+      <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-auto">
+  <LiveTracking/>
 </div>
 
- 
-       <div className="flex flex-col justify-end h-screen absolute top-0 w-full">
+
+      <div className="flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[30%] p-5 bg-white relative z-10">
           <h5 ref={panelCloseRef} onClick={() => setPanelOpen(false)} className="absolute top-6 right-4 opacity-100 cursor-pointer">
             <IoIosArrowDown />
@@ -196,12 +196,12 @@ function Home() {
         </div>
 
         {/* Location Search Panel */}
-         <div
+        <div
           ref={panelRef}
-          className={`bg-white p-5 transition-all duration-300 overflow-hidden ${
+          className={`bg-white px-5 transition-all duration-300 overflow-hidden ${
             panelOpen ? 'h-[70%]' : 'h-0 p-0'
           } z-20`}
-        > 
+        >
           <button
             onClick={findTrip}
             className="bg-black text-white px-3 py-2 rounded w-full"
@@ -217,8 +217,8 @@ function Home() {
             setDestination={setDestination}
             activeField={activeField}
           />
-        </div> 
-      </div> 
+        </div>
+      </div>
 
       {/* Panels */}
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
@@ -268,9 +268,8 @@ function Home() {
         setVehicleFound={setVehicleFound}
         setWaitingForDriver={setWaitingForDriver}
         waitingForDriver={waitingForDriver} />
-      </div> 
       </div>
-    
+    </div>
   );
 }
 
