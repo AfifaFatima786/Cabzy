@@ -11,6 +11,7 @@ import RidePopUp from '../components/RidePopUp';
 import ConfirmRidePopup from '../components/ConfirmRidePopup';
 import { SocketContext } from '../context/SocketContext';
 import { CaptainDataContext } from '../context/CaptainContext';
+import LiveTracking from '../components/LiveTracking';
 
 function CaptainHome() {
 
@@ -139,11 +140,12 @@ console.log(check,"Confoirm ride functione")
 
 
         <div className='h-[60%]'>
-            <img
+            {/* <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS24ZBRpV4HJXIkRJsvQes6jbNvz1zOhySwWg&s"
                     alt="Background"
                 className="  w-full h-full object-cover "
-                    />
+                    /> */}
+                    <LiveTracking/>
         </div>
 
       

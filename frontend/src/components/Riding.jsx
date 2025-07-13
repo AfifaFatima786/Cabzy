@@ -7,6 +7,7 @@ import {Link,useLocation} from 'react-router-dom'
 import { SocketContext } from '../context/SocketContext';
 import {useContext,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
+import LiveTracking from './LiveTracking';
 
 function Riding() {
 
@@ -33,11 +34,12 @@ function Riding() {
 
 
         <div className='h-[40%]'>
-            <img
+            {/* <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS24ZBRpV4HJXIkRJsvQes6jbNvz1zOhySwWg&s"
                     alt="Background"
                 className="  w-full h-full object-cover "
-                    />
+                    /> */}
+                    <LiveTracking/>
         </div>
 
         <div className='h-[60%] flex flex-col gap-1'>

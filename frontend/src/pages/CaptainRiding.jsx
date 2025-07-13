@@ -6,6 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import gsap from 'gsap'
 import FinishRide from '../components/FinishRide';
+import LiveTracking from '../components/LiveTracking';
 
 const CaptainRiding = () => {
 
@@ -53,11 +54,12 @@ const CaptainRiding = () => {
 
 
         <div className='h-[80%]'>
-            <img
+            {/* <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS24ZBRpV4HJXIkRJsvQes6jbNvz1zOhySwWg&s"
                     alt="Background"
                 className="  w-full h-full object-cover "
-                    />
+                    /> */}
+                    <LiveTracking/>
         </div>
 
 
