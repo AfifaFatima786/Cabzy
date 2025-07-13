@@ -76,7 +76,8 @@ function Home() {
 
   socket.on('ride-started',ride=>{
     setWaitingForDriver(false)
-    navigate('/riding')
+    console.log(ride)
+    navigate('/riding',{state:{ride}})
 
 
   })

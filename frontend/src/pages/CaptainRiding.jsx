@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import {Link,useLocation} from 'react-router-dom'
+
 import { FiLogOut } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import gsap from 'gsap'
@@ -10,6 +11,8 @@ const CaptainRiding = () => {
 
   const [finishRidePanel, setFinishRidePanel] = useState(false)
   const finishRidePanelRef = useRef(null)
+  const location=useLocation()
+  const rideData=location.state?.ride
 
   
 
@@ -81,7 +84,9 @@ const CaptainRiding = () => {
   
        className='fixed  w-full translate-y-full  bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
-       <FinishRide setFinishRidePanel={setFinishRidePanel}  />
+       <FinishRide 
+       rideData={rideData}
+       setFinishRidePanel={setFinishRidePanel}  />
 
   </div>
 
