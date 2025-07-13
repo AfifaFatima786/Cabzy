@@ -12,7 +12,7 @@ const CaptainRiding = () => {
   const [finishRidePanel, setFinishRidePanel] = useState(false)
   const finishRidePanelRef = useRef(null)
   const location=useLocation()
-  const rideData=location.state?.ride
+  const ride=location.state?.ride
 
   
 
@@ -85,7 +85,8 @@ const CaptainRiding = () => {
        className='fixed  w-full translate-y-full  bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
        <FinishRide 
-       rideData={rideData}
+       ride={ride}
+       
        setFinishRidePanel={setFinishRidePanel}  />
 
   </div>

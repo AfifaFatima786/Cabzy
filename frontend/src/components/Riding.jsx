@@ -4,15 +4,22 @@ import { SlLocationPin } from "react-icons/sl";
 import { IoMdCash } from "react-icons/io";
 import { IoMdHome } from "react-icons/io";
 import {Link,useLocation} from 'react-router-dom'
+import { SocketContext } from '../context/SocketContext';
+import {useContext,useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Riding() {
 
     const location=useLocation()
 
     const {ride}=location.state|| {}
+    const navigate=useNavigate()
+    const {socket} = useContext(SocketContext)
 
-    console.log(ride)
+    socket.on('ride-ended',()=>{
+        navigate('/home')
 
+    })
 
 
   return (

@@ -3,9 +3,30 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaLocationDot } from "react-icons/fa6";
 import { SlLocationPin } from "react-icons/sl";
 import { IoMdCash } from "react-icons/io";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 function FinishRide(props) {
+  const navigate=useNavigate()
+
+  async function endRide(){
+
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`,{rideId:props.ride._id},
+      {
+      withCredentials:true}
+    )
+
+    if(response.status===200){
+      
+      navigate('/captain-home')
+    }
+
+
+  }
+
+
+
   return (
    <div className='flex py-2  flex-col gap-2 '>
               <h5 onClick={()=>{
@@ -66,12 +87,13 @@ function FinishRide(props) {
                   <div className='w-full flex' >
                    
    
-         <Link
-           to='/captain-home'
+         <button
+         onClick={endRide}
+          
            className='bg-green-600 text-white mt-5 font-semibold py-2 px-6 rounded-lg w-full text-center'
          >
            Finish Ride
-         </Link> </div>
+         </button> </div>
          {/* <div>
 
          <p className='text-red-500 text-xs mt-2 '>Click on finish ride button if you have completed the payment</p>

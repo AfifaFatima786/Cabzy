@@ -161,3 +161,40 @@ module.exports.startRide=async(req,res)=>{
 
 }
 
+
+
+module.exports.endRide=async(req,res)=>{
+    const errors=validationResult(req);
+
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+    
+
+    const {rideId}=req.body;
+    console.log(rideId+"y yh p h start me hi controller k")
+
+
+    try{
+
+        const ride=await rideService.endRide({rideId,captain:req.captain})
+        console.log(ride+"y try me h controller k")
+
+        sendMessageToSocketId(ride.user.socketId,{
+            event:'ride-ended',
+            data:ride
+        })
+
+        return res.status(200).json(ride)
+
+    }
+    catch(err){
+        console.log("yha catch me  error h controlller k")
+        return res.status(500).json({message:err.message})
+    }
+
+
+}
+
+
+
