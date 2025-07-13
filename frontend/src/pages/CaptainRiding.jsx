@@ -75,8 +75,9 @@ const CaptainRiding = () => {
 
 
                           
-         <h4 className='text-xl font-bold'>4 km away</h4>
-         <button className=' bg-green-600 text-white font-semibold py-2 px-7 rounded-lg'>Complete Ride</button>
+         <div className='flex w-full items-center justify-center'>
+         <Link to='/captain-home' className=' bg-green-600 text-white font-semibold py-2 px-7 rounded-lg'>Complete Ride</Link>
+         </div>
 
         </div>
 

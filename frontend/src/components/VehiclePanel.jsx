@@ -3,6 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 
 const VehiclePanel = (props) => {
+  
   return (
     <div>
         <h5 onClick={()=>{
@@ -16,6 +17,7 @@ const VehiclePanel = (props) => {
             
         
             <div onClick={()=>{props.setConfirmRidePanel(true)
+              props.setValue(1)
               props.setVehicleType('car')
             }} className='flex border-2 p-2 border-gray-200 active:border-black rounded-xl w-full items-center gap-2   justify-between '>
               <img className='h-10' src="https://www.pngplay.com/wp-content/uploads/8/Uber-PNG-Photos.png" alt="" />
@@ -30,6 +32,8 @@ const VehiclePanel = (props) => {
         
             
             <div onClick={()=>{props.setConfirmRidePanel(true)
+             
+             props.setValue(2)
               props.setVehicleType('motorcycle')
             }} className='flex border-2 p-2 border-gray-300 active:border-black rounded-xl w-full items-center gap-2   justify-between '>
               <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1698944322/assets/92/00189a-71c0-4f6d-a9de-1b6a85239079/original/UberMoto-India-Orange.png" alt="" />
@@ -45,6 +49,7 @@ const VehiclePanel = (props) => {
               
             <div onClick={()=>{props.setConfirmRidePanel(true)
               props.setVehicleType('auto')
+              props.setValue(3)
             }} className='flex border-2 p-2 border-gray-200 active:border-black rounded-xl w-full items-center gap-2   justify-between '>
               <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648431773/assets/1d/db8c56-0204-4ce4-81ce-56a11a07fe98/original/Uber_Auto_558x372_pixels_Desktop.png" alt="" />
               <div className=' '>

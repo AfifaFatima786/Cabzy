@@ -79,19 +79,19 @@ function ConfirmRidePopup(props) {
    
                        <div className='flex flex-col gap-3 justify-between items-center'>
                
-               <div className='w-full font-semibold flex flex-col gap-1.5 '>
+               <div className='w-full mt-2 font-semibold flex flex-col gap-1.5 '>
                    <div className='flex gap-4 px-2  border-b-2 border-gray-200 items-center '>
                        <FaLocationDot />
                        <div>
                            
-                           <p className='text-sm'>{props.ride?.pickup}</p>
+                           <p className='text-lg'>{props.ride?.pickup}</p>
                        </div>
                    </div>
                    <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                        <SlLocationPin />
                        <div>
                            
-                           <p className='text-sm'>{props.ride?.destination}</p>
+                           <p className='text-lg'>{props.ride?.destination}</p>
                        </div>
                        </div>
        

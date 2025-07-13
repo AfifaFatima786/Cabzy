@@ -17,6 +17,7 @@ function Home() {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
+  const [value,setValue]=useState(0)
 
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [ConfirmRidePanel, setConfirmRidePanel] = useState(false);
@@ -78,7 +79,7 @@ function Home() {
   socket.on('ride-started',ride=>{
     setWaitingForDriver(false)
     console.log(ride)
-    navigate('/riding',{state:{ride}})
+    navigate('/riding',{state:{ride,value}})
 
 
   })
@@ -226,6 +227,8 @@ function Home() {
       }`}>
         <VehiclePanel
           fare={fare}
+          value={value}
+          setValue={setValue}
           setVehicleType={setVehicleType}
           setVehiclePanelOpen={setVehiclePanelOpen}
           setConfirmRidePanel={setConfirmRidePanel}
@@ -239,6 +242,8 @@ function Home() {
           pickup={pickup}
           destination={destination}
           fare={fare}
+          value={value}
+          setValue={setValue}
           ride={ride}
           vehicleType={vehicleType}
           createRide={createRide}
@@ -255,6 +260,9 @@ function Home() {
           pickup={pickup}
           destination={destination}
           fare={fare}
+          value={value}
+          setValue={setValue}
+
           vehicleType={vehicleType}
           createRide={createRide}
           setConfirmRidePanel={setConfirmRidePanel}
@@ -265,6 +273,9 @@ function Home() {
         waitingForDriver ? 'translate-y-0 z-60' : 'translate-y-full z-0'
       }`}>
         <WaitingForDriver ride={ride}
+        value={value}
+          setValue={setValue}
+
         setVehicleFound={setVehicleFound}
         setWaitingForDriver={setWaitingForDriver}
         waitingForDriver={waitingForDriver} />
