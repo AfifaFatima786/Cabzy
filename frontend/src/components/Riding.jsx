@@ -59,7 +59,7 @@ function Riding() {
                             <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                                 <FaLocationDot />
                                 <div>
-                                    <h3>546/415</h3>
+                                   
                                     <p>{ride?.pickup}</p>
                                 </div>
                             </div>
@@ -83,7 +83,8 @@ function Riding() {
 
 
 
-            <button className='w-full bg-green-600 text-white font-semibold p-2 rounded-lg  '>Make a Payment</button>
+            <Link to='/home'
+             className='w-full text-center mt-4 bg-green-600 text-white font-semibold p-2 rounded-lg  '>Payment done</Link>
         </div>
     </div>
   )

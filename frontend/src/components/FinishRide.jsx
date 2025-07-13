@@ -57,14 +57,14 @@ function FinishRide(props) {
                       <div className='flex gap-4 px-2  border-b-2 border-gray-200 items-center '>
                           <FaLocationDot />
                           <div>
-                              <h3>546/415</h3>
+                             
                               <p>{props.ride?.pickup}</p>
                           </div>
                       </div>
                       <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                           <SlLocationPin />
                           <div>
-                              <h3>546/415</h3>
+                              
                               <p>{props.ride?.destination}</p>
                           </div>
                           </div>

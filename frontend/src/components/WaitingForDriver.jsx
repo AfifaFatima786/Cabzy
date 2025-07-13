@@ -34,18 +34,16 @@ function WaitingForDriver(props) {
                     <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                         <FaLocationDot />
                         <div>
-                             <h3>546/415</h3>
-                            {/* <p>Sarfarazganj Lucknow</p> */}
+                             
                             {props.ride?.pickup}
                         </div>
                     </div>
                     <div className='flex gap-4 px-2 py-1 border-b-2 border-gray-200 items-center '>
                         <SlLocationPin />
                         <div>
-                          <h3>546/415</h3>
+                         
                           {props.ride?.destination}
-                            {/* <h3>546/415</h3>
-                            <p>Sarfarazganj Lucknow</p> */}
+                            
 
                         </div>
                         </div>
