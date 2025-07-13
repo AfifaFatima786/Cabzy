@@ -12,11 +12,11 @@ const UserProtectWrapper = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log('🔍 UserProtectWrapper - Token:', token);
-    console.log('🔍 UserProtectWrapper - Current user context:', user);
+    console.log(' UserProtectWrapper - Token:', token);
+    console.log(' UserProtectWrapper - Current user context:', user);
     
     if (!token) {
-      console.log('❌ No token found, redirecting to login');
+      console.log(' No token found, redirecting to login');
       navigate('/login');
       return;
     }
@@ -28,12 +28,12 @@ const UserProtectWrapper = ({ children }) => {
         withCredentials: true
       })
         .then(response => {
-          console.log("✅ User profile response:", response.data);
+          console.log("User profile response:", response.data);
           setUser(response.data);
           setIsAuthenticated(true);
         })
         .catch(err => {
-          console.error("❌ Profile fetch error:", err);
+          console.error(" Profile fetch error:", err);
           localStorage.removeItem('token');
           navigate('/login');
         });

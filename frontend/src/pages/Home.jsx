@@ -8,6 +8,7 @@ import WaitingForDriver from '../components/WaitingForDriver';
 import axios from 'axios';
 import { SocketContext } from '../context/SocketContext';
 import { UserDataContext } from '../context/UserContext';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Home() {
   const [pickup, setPickup] = useState('');
@@ -29,17 +30,22 @@ function Home() {
 
   const { user } = useContext(UserDataContext);
   const { socket, sendMessage } = useContext(SocketContext);
+  const [ride,setRide]=useState(null)
+  const navigate=useNavigate()
+
+
+
 
   // ✅ CHANGED: Check if user and user._id exist before sending socket event
   useEffect(() => {
-    console.log('🔍 Home - User context:', user);
-    console.log('🔍 Home - Socket connected:', socket?.connected);
+    console.log(' Home - User context:', user);
+    console.log(' Home - Socket connected:', socket?.connected);
     
     if (user && user._id && socket) {
-      console.log("🟢 Sending join with user ID:", user._id);
+      console.log(" Sending join with user ID:", user._id);
       sendMessage("join", { userType: "user", userId: user._id });
     } else {
-      console.log("❌ Cannot send join - missing:", {
+      console.log(" Cannot send join - missing:", {
         user: !!user,
         userId: user?._id,
         socket: !!socket
@@ -47,12 +53,15 @@ function Home() {
     }
   }, [user, socket]);
 
+
+
   // ✅ CHANGED: Updated ride-confirm listener with safe logs and UI triggers
   useEffect(() => {
     if (!socket) return;
 
     const handleRideConfirm = (ride) => {
-      console.log('✅ Received ride-confirm:', ride);
+      console.log(' Received ride-confirm:', ride);
+      setRide(ride)
       setVehicleFound(false);
       setWaitingForDriver(true);
     };
@@ -63,6 +72,16 @@ function Home() {
       socket.off('ride-confirm', handleRideConfirm);
     };
   }, [socket]);
+
+
+  socket.on('ride-started',ride=>{
+    setWaitingForDriver(false)
+    navigate('/riding')
+
+
+  })
+
+
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);
@@ -97,7 +116,7 @@ function Home() {
   };
 
   async function findTrip() {
-    console.log("🔍 Find Trip clicked");
+    console.log(" Find Trip clicked");
     setPanelOpen(false);
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
       params: { pickup, destination },
@@ -117,7 +136,7 @@ function Home() {
         withCredentials: true
       });
 
-      console.log("🎯 Create Ride Response:", response.data);
+      console.log(" Create Ride Response:", response.data);
 
       // ✅ FIXED: Set vehicleFound to true when ride is created successfully
       if (response.status === 201) {
@@ -125,7 +144,7 @@ function Home() {
         setConfirmRidePanel(false);
       }
     } catch (err) {
-      console.error("❌ Error creating ride:", err.response?.data || err.message);
+      console.error(" Error creating ride:", err.response?.data || err.message);
     }
   }
 
@@ -213,6 +232,7 @@ function Home() {
           pickup={pickup}
           destination={destination}
           fare={fare}
+          ride={ride}
           vehicleType={vehicleType}
           createRide={createRide}
           setConfirmRidePanel={setConfirmRidePanel}
@@ -237,7 +257,10 @@ function Home() {
       <div className={`fixed w-full bg-white py-1 px-3 gap-2 flex flex-col bottom-0 transition-transform duration-500 ${
         waitingForDriver ? 'translate-y-0 z-60' : 'translate-y-full z-0'
       }`}>
-        <WaitingForDriver waitingForDriver={waitingForDriver} />
+        <WaitingForDriver ride={ride}
+        setVehicleFound={setVehicleFound}
+        setWaitingForDriver={setWaitingForDriver}
+        waitingForDriver={waitingForDriver} />
       </div>
     </div>
   );

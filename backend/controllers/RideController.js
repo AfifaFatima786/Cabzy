@@ -123,3 +123,41 @@ module.exports.confirmRide=async(req,res)=>{
         return res.status(500).json({message:err.message})
     }
 }
+
+
+module.exports.startRide=async(req,res)=>{
+    const errors=validationResult(req);
+
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+    
+
+    const {rideId,otp}=req.query;
+
+    console.log(rideId+"rideId yha p controller me")
+    console.log(otp+"otp shi h chlo bdiya")
+
+
+    try{
+
+        const ride=await rideService.startRide({rideId,otp,captain:req.captain})
+
+        sendMessageToSocketId(ride.user.socketId,{
+            event:'ride-started',
+            data:ride
+        })
+
+        return res.status(200).json(ride)
+       
+
+
+
+    }
+    catch(err){
+        return res.status(500).json({message:err.message})
+    }
+
+
+}
+
