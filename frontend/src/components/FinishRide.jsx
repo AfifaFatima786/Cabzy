@@ -45,8 +45,7 @@ function FinishRide(props) {
       
                           <h2 className='text-xl font-medium'>{props.ride?.user.fullname.firstname}</h2>
                       </div>
-                      <h5 className='text-lg font-semibold'>2.2 km</h5>
-                  </div>
+                      </div>
       
       
       

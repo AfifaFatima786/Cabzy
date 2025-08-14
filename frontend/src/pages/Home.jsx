@@ -38,31 +38,18 @@ function Home() {
 
 
 
-  // ✅ CHANGED: Check if user and user._id exist before sending socket event
   useEffect(() => {
-    console.log(' Home - User context:', user);
-    console.log(' Home - Socket connected:', socket?.connected);
-    
     if (user && user._id && socket) {
-      console.log(" Sending join with user ID:", user._id);
       sendMessage("join", { userType: "user", userId: user._id });
-    } else {
-      console.log(" Cannot send join - missing:", {
-        user: !!user,
-        userId: user?._id,
-        socket: !!socket
-      });
     }
   }, [user, socket]);
 
 
 
-  // ✅ CHANGED: Updated ride-confirm listener with safe logs and UI triggers
   useEffect(() => {
     if (!socket) return;
 
     const handleRideConfirm = (ride) => {
-      console.log(' Received ride-confirm:', ride);
       setRide(ride)
       setVehicleFound(false);
       setWaitingForDriver(true);
@@ -139,15 +126,12 @@ function Home() {
         withCredentials: true
       });
 
-      console.log(" Create Ride Response:", response.data);
-
-      // ✅ FIXED: Set vehicleFound to true when ride is created successfully
       if (response.status === 201) {
         setVehicleFound(true);
         setConfirmRidePanel(false);
       }
     } catch (err) {
-      console.error(" Error creating ride:", err.response?.data || err.message);
+      console.error("Error creating ride:", err.response?.data || err.message);
     }
   }
 

@@ -33,12 +33,11 @@ function initialiseSocket(server){
             }
             else if(userType==='captain'){
                 console.log(`🟡 Captain ${userId} joining with socket ${socket.id}`)
-                await captainModel.findByIdAndUpdate(userId,{
-                    socketId:socket.id
+                            await captainModel.findByIdAndUpdate(userId,{
+                socketId:socket.id,
+                status: 'active' // Set captain as active when they join
 
-                });
-                console.log(`✅ Captain socket ID updated in database`)
-
+            });
             }
             
         });
@@ -46,15 +45,12 @@ function initialiseSocket(server){
         socket.on('update-location-captain',async (data)=>{
             const {userId,location}=data;
 
-            if(!location || !location.ltd || !location.lng){
+            if(!location || !location.coordinates){
                 return socket.emit('error',{message:"Invalid location details"})
             }
 
             await captainModel.findByIdAndUpdate(userId,{
-                location: {
-                type: 'Point',
-                coordinates: [location.lng, location.ltd] // [longitude, latitude]
-  }
+                location: location
             })
 
         })

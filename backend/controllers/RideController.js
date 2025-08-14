@@ -42,16 +42,19 @@ if (!userId) {
 
         const captainsInRadius=await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd,pickupCoordinates.lng,2)
 
+        console.log(`Found ${captainsInRadius.length} captains in radius`)
+        
         ride.otp=""
 
         const rideWithUser=await rideModel.findOne({_id:ride._id}).populate('user')
 
-        captainsInRadius.map(captain=>{
-            sendMessageToSocketId(captain.socketId,{
-                event:'new-ride',
-                data:rideWithUser
-            })
-
+        captainsInRadius.forEach(captain=>{
+            if (captain.socketId) {
+                sendMessageToSocketId(captain.socketId,{
+                    event:'new-ride',
+                    data:rideWithUser
+                })
+            }
         })
         
         // ✅ KEEP: Only this response should be sent

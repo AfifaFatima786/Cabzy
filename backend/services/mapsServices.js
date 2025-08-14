@@ -55,6 +55,7 @@ module.exports.getDistanceTime = async (origin, destination) => {
     }
 }
 
+
 module.exports.getSuggestions = async (input) => {
     if(!input){
         throw new Error('Query is required');
@@ -89,24 +90,26 @@ module.exports.getSuggestions = async (input) => {
 
 
 module.exports.getCaptainsInTheRadius=async(ltd,lng,radiusKm)=>{
-    console.log(ltd)
-    console.log("Searching near:", { lng, ltd, radius: radiusKm / 6371 });
-
-    const captains=await captainModel.find({
+    try {
+        const captains=await captainModel.find({
+            // status: 'active', // Only find active captains
+            // location: { $exists: true, $ne: null }, // Ensure location exists
+            // 'location.coordinates': { $exists: true, $ne: null }, // Ensure coordinates exist
+            location:{
+             $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [lng, ltd] 
+            },
+            $maxDistance: radiusKm * 1000 // radius in meters
+          }}
+            
+        }).select('_id socketId location status')
         
-        location:{
-         $near: {
-        $geometry: {
-          type: "Point",
-          coordinates: [lng, ltd] 
-        },
-        $maxDistance: radiusKm * 1000 // radius in meters
-      }}
-        
-    })
-    
-
-    
-    return captains;
+        return captains;
+    } catch (error) {
+        console.error('Error finding captains in radius:', error)
+        return []
+    }
 
 }

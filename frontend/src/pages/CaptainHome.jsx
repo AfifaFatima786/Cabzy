@@ -23,34 +23,33 @@ function CaptainHome() {
   const {socket,sendMessage}=useContext(SocketContext)
   const {captain}=useContext(CaptainDataContext)
   const [ride, setRide] = useState(null)
+  
+
 
 
 
 
   
     useEffect(()=>{
-     
-      sendMessage("join",{ userType:"captain",userId:captain._id})
+      if (captain && captain._id && socket) {
+        sendMessage("join",{ userType:"captain",userId:captain._id})
+      }
       
 
       const updateLocation=()=>{
         if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition(position=>{
-
-
-
-            socket.emit('update-location-captain',{
+            const locationData = {
               userId:captain._id,
-              // location:
-              // {ltd:position.coords.latitude,
-              // lng:position.coords.longitude}
-
-
               location: {
-    type: 'Point',
-    coordinates: [position.coords.longitude, position.coords.latitude]
-  }
-            })
+                type: 'Point',
+                coordinates: [position.coords.longitude, position.coords.latitude]
+              }
+            };
+            
+            socket.emit('update-location-captain', locationData);
+          }, (error) => {
+            console.error('Error getting location:', error);
           })
         }
       }
@@ -58,9 +57,7 @@ function CaptainHome() {
       const locationInterval=setInterval(updateLocation,10000)
       updateLocation()
 
-      // ✅ FIXED: Move socket listener inside useEffect
       const handleNewRide = (data) => {
-        console.log('🎯 New ride received:', data);
         setRide(data)
         setRidePopupPanel(true)
       }
@@ -152,6 +149,8 @@ console.log(check,"Confoirm ride functione")
 
         <div className='h-[30%] bottom-0 p-4 flex flex-col gap-5'>
          <CaptainDetails/> 
+         
+         
         </div>
         
 
@@ -159,7 +158,10 @@ console.log(check,"Confoirm ride functione")
          <div ref={ridePopupPanelRef}  
        className='fixed w-full translate-y-full bg-white py-1 px-3 gap-2 flex flex-col  z-20 bottom-0'>
 
-       {ride && (<RidePopUp setRidePopupPanel={setRidePopupPanel} 
+               {ride &&
+               // ridePopupPanel && 
+                (
+         <RidePopUp setRidePopupPanel={setRidePopupPanel} 
        
        ride={ride}
        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
