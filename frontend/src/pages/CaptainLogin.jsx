@@ -2,7 +2,7 @@ import React,{useState,useContext} from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
+import { toast } from 'react-toastify';
 import { CaptainDataContext } from '../context/CaptainContext';
 
 function CaptainLogin() {
@@ -24,6 +24,8 @@ function CaptainLogin() {
     }
     console.log(captain)
 
+    try{
+
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, captain,{
       withCredentials:true
   
@@ -38,13 +40,17 @@ function CaptainLogin() {
       console.log(data.token)
       localStorage.setItem('token', JSON.stringify(data.token))
       console.log('Stored token:', localStorage.getItem('token'));
-      // navigate('/captain-home')
+      toast.success("Login successful!");
+      setEmail('')
+      setPassword('')
+      navigate('/captain-home')
     }
 
-    setEmail('')
-    setPassword('')
-    navigate('/captain-home')
-  }
+  }catch(error){
+    
+      toast.error("Invalid Email or Password")
+  
+  }}
 
   return (
     <div className='p-5 h-screen flex flex-col gap-3 justify-between'>

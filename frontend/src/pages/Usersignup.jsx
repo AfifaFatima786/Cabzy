@@ -2,6 +2,7 @@ import React,{useState,createContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {UserDataContext} from '../context/UserContext'
+import { toast } from 'react-toastify';
 
 function Usersignup() {
 
@@ -32,7 +33,9 @@ function Usersignup() {
     console.log(newUser)
 // yahan pr humne with credentials true kr diya hai vo nahi kiya tha pehle srf login mein he kiya tha isliye regsister route pr cookie set nahi ho rhi thi
 
+    try{
 
+    
     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser,{withCredentials:true})
 
     /*axios.post(url,newUser)   this is the syntax to send information from frontend to backend by giving exact url the info from here goes to that specific url in backend so that we can access info there*/
@@ -55,8 +58,22 @@ function Usersignup() {
     setPassword('')
 
     setfirstName('')
-    setlastName('')
-  }
+    setlastName('')}
+    catch(error){
+      if (error.response) {
+    const data = error.response.data;
+
+    
+    const msg =
+      data?.errors?.[0]?.msg ||   
+      data?.message ||            
+      data?.error?.msg ||         
+      "Something went wrong!";    
+
+    toast.error(msg);
+    console.error("Validation error:", msg);
+    }
+  }}
 
 
 

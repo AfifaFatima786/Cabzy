@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { CaptainDataContext } from '../context/CaptainContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify';
+
+
 
 const CaptainSignup = () => {
 
@@ -23,47 +26,64 @@ const CaptainSignup = () => {
 
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-    const captainData = {
-      fullName: {
-        firstName: firstName,
-        lastName: lastName
-      },
-      email: email,
-      password: password,
-      vehicle: {
-        color: vehicleColor,
-        plate: vehiclePlate,
-        capacity:vehicleCapacity,
-        vehicleType: vehicleType
-      }
+  e.preventDefault();
+  const captainData = {
+    fullName: {
+      firstName: firstName,
+      lastName: lastName
+    },
+    email: email,
+    password: password,
+    vehicle: {
+      color: vehicleColor,
+      plate: vehiclePlate,
+      capacity: vehicleCapacity,
+      vehicleType: vehicleType
     }
+  };
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, captainData,{
-      withCredentials:true
-  
-    })
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captain/register`,
+      captainData,
+      { withCredentials: true }
+    );
 
     if (response.status === 201) {
-      const data = response.data
-      setCaptain(data.captain)  /*backend me successfully register hogya uske baad hi hm frontend k context me update yaani setCaptain krege*/
-      localStorage.setItem('token', data.token)
-      
-      console.log(data.token)
-      
-      navigate('/captain-home')
+      const data = response.data;
+      setCaptain(data.captain); // backend me successfully register hogya uske baad hi hm frontend k context me update yaani setCaptain krege
+      localStorage.setItem('token', data.token);
+
+      console.log(data.token);
+      toast.success("Registered successfully!");
+      navigate('/captain-home');
     }
-
-    setEmail('')
-    setFirstName('')
-    setLastName('')
-    setPassword('')
-    setVehicleColor('')
-    setVehiclePlate('')
-    setVehicleCapacity('')
-    setVehicleType('')
-
+  } catch (error) {
+   if (error.response) {
+       const data = error.response.data;
+   
+       
+       const msg =
+         data?.errors?.[0]?.msg ||   
+         data?.message ||            
+         data?.error?.msg ||         
+         "Something went wrong!";    
+   
+       toast.error(msg);
+       console.error("Validation error:", msg);
+       }
   }
+
+  setEmail('');
+  setFirstName('');
+  setLastName('');
+  setPassword('');
+  setVehicleColor('');
+  setVehiclePlate('');
+  setVehicleCapacity('');
+  setVehicleType('');
+};
+
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>

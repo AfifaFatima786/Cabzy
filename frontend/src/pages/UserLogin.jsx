@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {UserDataContext} from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 function UserLogin() {
 
@@ -16,6 +17,8 @@ function UserLogin() {
 
 
   const submitHandler=async (e)=>{
+
+
     e.preventDefault()
 
     const userData={
@@ -23,6 +26,8 @@ function UserLogin() {
       password:password
 
     }
+
+    try{
 
     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,userData,{withCredentials:true})
 
@@ -36,6 +41,7 @@ function UserLogin() {
     // const  localstoragetoken = data.token
       
       localStorage.setItem('token',data.token)
+      toast.success("Login successful!");
       navigate('/home')
 
     }
@@ -44,6 +50,11 @@ function UserLogin() {
     setEmail('')
     setPassword('')
   }
+  catch(error){
+      
+        toast.error("Invalid Email or Password")
+    
+    }}
 
 
 
