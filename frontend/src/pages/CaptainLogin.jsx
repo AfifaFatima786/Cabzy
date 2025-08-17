@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { CaptainDataContext } from '../context/CaptainContext';
+import logo from '../assets/logo.png';
 
 function CaptainLogin() {
 
@@ -57,7 +58,7 @@ function CaptainLogin() {
 
 
       <div className='flex flex-col '>
- <img className='w-20' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
+ <img className='w-25' src={logo} alt="" />
       
       <form onSubmit={(e)=>{submitHandler(e)} }className="flex flex-col gap-2.5" action="">
         <h3 className='font-bold text-lg'>What's your email</h3>

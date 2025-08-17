@@ -4,6 +4,7 @@ import {UserDataContext} from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import logo from '../assets/logo.png';
 
 function UserLogin() {
 
@@ -61,9 +62,9 @@ function UserLogin() {
 
   return (
     <div className='p-7 h-screen flex flex-col gap-3 justify-between'>
-      <div className='flex flex-col gap-8'>
+      <div className='flex flex-col '>
 
-      <img className='w-18' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+      <img className='w-25' src={logo} alt="" />
       <form onSubmit={(e)=>{submitHandler(e)} }className="flex flex-col gap-2.5" action="">
         <h3 className='font-bold text-lg'>What's your email</h3>
         <input value={email} onChange={(e)=>{
